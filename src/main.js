@@ -1,29 +1,31 @@
 import { fetchImages } from './js/pixabay-api.js';
 import { renderImages, clearGallery } from './js/render-function.js';
-
 import iziToast from "izitoast";
 import 'izitoast/dist/css/iziToast.min.css';
 
 const form = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
+const loadMoreButton = document.querySelector('.load-more');
 
 let currentPage = 1;
 let currentQuery = '';
+let totalHits = 0;
 
 form.addEventListener('submit', onSearch);
+loadMoreButton.addEventListener('click', onLoadMore);
 
-function onSearch(event) {
+async function onSearch(event) {
 	event.preventDefault();
 	const searchQuery = event.target.elements.searchQuery.value.trim();
 
 	if (searchQuery === '') {
 		iziToast.warning({
-			timeout: 10000, 
-			close: true,  
-			position: 'topRight', 
-			transitionIn: 'fadeIn', 
-			transitionOut: 'fadeOut', 
+			timeout: 1000,
+			close: true,
+			position: 'topRight',
+			transitionIn: 'fadeIn',
+			transitionOut: 'fadeOut',
 			displayMode: 2,
 			message: 'Please enter a search query!',
 		});
@@ -32,47 +34,81 @@ function onSearch(event) {
 
 	currentQuery = searchQuery;
 	currentPage = 1;
+	totalHits = 0;
 
-	// Очищуємо попередні результати
 	clearGallery(gallery);
-
-	// Показуємо індикатор завантаження
+	clearInput();
+	hideLoadMoreButton();
 	showLoader();
 
-	// Виконуємо запит
-	fetchImages(currentQuery, currentPage)
-		.then(data => {
-			if (data.hits.length === 0) {
-				iziToast.error({
-					timeout: 10000,
-					close: true,
-					position: 'topRight',
-					transitionIn: 'fadeIn',
-					transitionOut: 'fadeOut',
-					displayMode: 2,
-					message: 'Sorry, there are no images matching your search query. Please, try again!',
-				});
-				return;
-			}
+	try {
+		const data = await fetchImages(currentQuery, currentPage);
+		totalHits = data.totalHits;
 
-			renderImages(data.hits, gallery);
-		})
-		.catch(error => {
+		if (data.hits.length === 0) {
 			iziToast.error({
-				timeout: 10000,
+				timeout: 1000,
 				close: true,
 				position: 'topRight',
 				transitionIn: 'fadeIn',
 				transitionOut: 'fadeOut',
 				displayMode: 2,
-				message: 'Something went wrong. Please try again later.',
+				message: 'Sorry, there are no images matching your search query. Please, try again!',
 			});
-			console.error('Error fetching images:', error);
-		})
-		.finally(() => {
-			hideLoader();
-			clearInput();  // Очищення поля вводу після завершення запиту
+			return;
+		}
+
+		renderImages(data.hits, gallery);
+		if (totalHits > 15) showLoadMoreButton();
+
+	} catch (error) {
+		iziToast.error({
+			timeout: 1000,
+			close: true,
+			position: 'topRight',
+			transitionIn: 'fadeIn',
+			transitionOut: 'fadeOut',
+			displayMode: 2,
+			message: 'Something went wrong. Please try again later.',
 		});
+		console.error('Error fetching images:', error);
+	} finally {
+		hideLoader();
+	}
+}
+
+async function onLoadMore() {
+	currentPage += 1;
+	showLoader();
+
+	try {
+		const data = await fetchImages(currentQuery, currentPage);
+		renderImages(data.hits, gallery);
+		smoothScroll();
+
+		if (currentPage * 15 >= totalHits) {
+			hideLoadMoreButton();
+			iziToast.info({
+				timeout: 5000,
+				close: true,
+				position: 'topRight',
+				message: "We're sorry, but you've reached the end of search results.",
+			});
+		}
+	} catch (error) {
+		iziToast.error({
+			timeout: 10000,
+			close: true,
+			position: 'topRight',
+			transitionIn: 'fadeIn',
+			transitionOut: 'fadeOut',
+			displayMode: 2,
+			message: 'Something went wrong. Please try again later.',
+		});
+		console.error('Error fetching more images:', error);
+	} finally {
+		hideLoader();
+	}
 }
 
 function showLoader() {
@@ -87,4 +123,18 @@ function clearInput() {
 	form.elements.searchQuery.value = '';
 }
 
+function showLoadMoreButton() {
+	loadMoreButton.style.display = 'block';
+}
 
+function hideLoadMoreButton() {
+	loadMoreButton.style.display = 'none';
+}
+
+function smoothScroll() {
+	const { height: cardHeight } = gallery.firstElementChild.getBoundingClientRect();
+	window.scrollBy({
+		top: cardHeight * 2,
+		behavior: 'smooth',
+	});
+}

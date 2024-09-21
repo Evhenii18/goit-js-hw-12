@@ -1,5 +1,3 @@
-// render-functions.js
-
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
@@ -18,23 +16,22 @@ export function renderImages(images, galleryElement) {
 				downloads,
 			}) => `
     <li class="gallery-item">
-			<a href="${largeImageURL}" >
-				<img class="gallery-img" src="${webformatURL}" alt="${tags}" loading="lazy" />
-				<div class="info">
-					<p><b>Likes</b> ${likes}</p>
-					<p><b>Views</b> ${views}</p>
-					<p><b>Comments</b> ${comments}</p>
-					<p><b>Downloads</b> ${downloads}</p>
-				</div>
-			</a>
-		</li>
+            <a href="${largeImageURL}" >
+                <img class="gallery-img" src="${webformatURL}" alt="${tags}" loading="lazy" />
+                <div class="info">
+                    <p><b>Likes</b> ${likes}</p>
+                    <p><b>Views</b> ${views}</p>
+                    <p><b>Comments</b> ${comments}</p>
+                    <p><b>Downloads</b> ${downloads}</p>
+                </div>
+            </a>
+        </li>
   `
 		)
 		.join('');
 
-	galleryElement.innerHTML = markup;
+	galleryElement.insertAdjacentHTML('beforeend', markup);
 
-	// Ініціалізація SimpleLightbox після рендерингу зображень
 	if (!lightbox) {
 		lightbox = new SimpleLightbox('.gallery a');
 	} else {
