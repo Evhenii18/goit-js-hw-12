@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JS Homework</title>
-    
-		<link rel="icon" type="image/svg+xml" href="#" />
-  </head>
-  <body>
-    
-    <main>
-				<ul>
-					<li><a href="./1-timer.html">Timer</a></li>
-					<li><a href="./2-snackbar.html">Snackbar</a></li>
-				</ul>
-				
-		</main>
-		
 
-  </body>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Image Search</title>
+	<link rel="stylesheet" href="./css/styles.css" />
+</head>
+
+<body>
+	<header>
+		<form id="search-form">
+			<input class="input" type="text" name="searchQuery" placeholder="Search images..." />
+			<button class="btn" type="submit">Search</button>
+		</form>
+	</header>
+	<main>
+		<div class="gallery-container">
+			<ul class="gallery">
+				
+			</ul>
+		</div>
+		<div class="loader">Loading images, please wait...</div>
+	</main>
+	<script type="module" src="./main.js"></script>
+
+</body>
+
 </html>
