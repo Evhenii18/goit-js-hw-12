@@ -1,0 +1,125 @@
+/**
+  |============================
+  | include css partials with
+  | default @import url()
+  |============================
+*/
+/* Common styles */
+@import url("./reset.css");
+@import url("./base.css");
+
+/* Sections style */
+
+.container {
+	padding: 40px;
+}
+
+.timer {
+	display: flex;
+	gap: 15px;
+	margin-top: 20px;
+}
+
+.field {
+	text-align: center;
+}
+
+.value {
+	font-size: 2rem;
+}
+
+.label {
+	display: block;
+	font-size: 0.8rem;
+}
+
+button:disabled {
+	background-color: rgb(233, 220, 220);
+}
+
+#datetime-picker {
+	outline: none;
+	border: 1px solid #808080;
+	padding: 8px 16px;
+	border-radius: 4px;
+}
+
+#datetime-picker:disabled {
+	color: #808080;
+}
+
+#datetime-picker:hover {
+	border: 1px solid #000000;
+}
+
+#datetime-picker:focus {
+	border: 1px solid #4e75ff;
+}
+
+.button:disabled {
+	border: none;
+	border-radius: 8px;
+	font-family: Montserrat;
+	font-size: 16px;
+	font-weight: 500;
+	letter-spacing: 0.04em;
+	text-align: left;
+	padding: 8px 16px;
+	color: #989898;
+	background-color: #CFCFCF;
+}
+
+.button:disabled:hover {
+	background-color: #CFCFCF;
+}
+
+.button {
+	border: none;
+	border-radius: 8px;
+	font-family: Montserrat;
+	font-size: 16px;
+	font-weight: 500;
+	letter-spacing: 0.04em;
+	text-align: left;
+	padding: 8px 16px;
+	color: #FFFFFF;
+	background-color: #4E75FF;
+	text-align: center;
+}
+
+.button:hover {
+	background-color: #6C8CFF;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+}
+
+.snackbar-container {
+	width: 25%;
+}
+
+#delay {
+	margin-top: 8px;
+	margin-bottom: 16px;
+	outline: none;
+	border: 1px solid #808080;
+	border-radius: 4px;
+	padding: 8px 16px;
+}
+
+#delay:hover {
+	border: 1px solid #000000;
+}
+
+#delay:focus {
+	border: 1px solid #4E75FF;
+}
+
+fieldset {
+	display: flex;
+	gap: 48px;
+	align-items: center;
+	justify-content: center;
+}
